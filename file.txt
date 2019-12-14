@@ -1,0 +1,11 @@
+a.out
+commands.log
+file.txt
+output.log
+searchfile.c
+search.h
+temp.txt
+terminal
+Terminal.c
+Testing1
+Testing2
