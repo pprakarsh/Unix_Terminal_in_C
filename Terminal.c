@@ -7,8 +7,10 @@
 #include<string.h>
 #include<sys/ipc.h>
 #include<unistd.h>
+#include <readline/readline.h>
+#include <readline/history.h>
 
-#define ANSI_COLOR_RED     "\x1b[31m"
+#define ANSI_COLOR_RED     "\033[1;31m"
 #define ANSI_COLOR_GREEN   "\x1b[32m"
 #define ANSI_COLOR_YELLOW  "\x1b[33m"
 #define ANSI_COLOR_BLUE    "\x1b[34m"
@@ -22,22 +24,26 @@ char flag_log = '0';
 FILE* fplog_cmd; 
 FILE* fplog_out;
 
+char* cwd()
+{
+	char* str = (char* )malloc(100*sizeof(char));
+	getcwd(str, 100);	
+	return (char*)str;
+}
+
 char* inputConsole()
 {
 	char *str;
-	size_t bufsiz= 200;
+	char* pwd = cwd();
+	strcat(pwd, ":$ ");
 
-	str = (char* )malloc(sizeof(char)*201);
-	getline(&str, &bufsiz, stdin);
+	printf(ANSI_COLOR_GREEN);
+	strcat(pwd, "\033[0m");
+	str = readline(pwd);
 
-	for(int i = 0; i < strlen(str); i++)
-	{
-		if(str[i] == '\n')
-		{
-			str[i] = '\0';
-			break;
-		}
-	}
+	free(pwd);
+	add_history(str);
+
 	return str;
 }
 
@@ -91,12 +97,6 @@ char* firstword(char* str)
 	return str;	
 }
 
-char* cwd()
-{
-	char* str = (char* )malloc(100*sizeof(char));
-	getcwd(str, 100);	
-	return (char*)str;
-}
 
 void updatelog(char* inp, FILE* fplog_cmd)
 {
@@ -148,9 +148,6 @@ int main()
 	printf(ANSI_COLOR_MAGENTA "\n\t\t\tMY TERMINAL" ANSI_COLOR_RESET "\n\n");
 	while(1)
 	{
-		char* str = cwd();
-		printf(ANSI_COLOR_GREEN " %s:$ " ANSI_COLOR_RESET, str);
-		free(str);
 		char* inp_st = inputConsole();
 
 		if(strcmp(inp_st, "enter") == 0)
@@ -158,9 +155,6 @@ int main()
 			while(1)
 			{
 				char* action = "Success";
-				char* str = cwd();
-				printf(ANSI_COLOR_GREEN " %s:$ " ANSI_COLOR_RESET, str);
-				free(str);
 
 				//Command Interpretor starts, flag for exit command required
 				char* inp = inputConsole();
@@ -295,6 +289,7 @@ int main()
 					}
 				}
 				fprintf(fplog_cmd, "\t%s\n", action);
+				free(inp);
 			}
 		}
 		else
@@ -307,5 +302,6 @@ int main()
 			break;
 		}
 	}
+	//free(inp_st);
 	fclose(fplog_cmd);
 }
