@@ -13,6 +13,10 @@ Executes internal commands like:
  Executes external commands like:
   1. All commands executed by your terminal shell, if you are using bash then commands like ls, man, mv, cp, rm, rmdir,            touch, cat etc. with the optional arguments eg. `ls -l`
   2. The commands can also be piped together (Multiple piping to form a single command) like `ls | grep string | grep str          |more` (Try executing the commands on your terminal and then on this terminal interface :))
+  
+  Other features:
+  1. Autocompletion of filename by pressing TAB
+  2. Execute previously executed command by pressing the UP ARROW
 
 
 ## Overview
@@ -28,6 +32,8 @@ Executes internal commands like:
 2. Add the executable in your PATH environment variable, in Unix like environment you would be able to do it by using
    `export PATH=$PATH:/home/directory1/directory2/directory_in_which_executable_present`
 3. Now, you can run the terminal by typing `terminal` on your shell prompt from anywhere in your system
+4. You can make changes and study the code. To link `searchfile.c` with `Terminal.c` and compile your version, execute 
+  `gcc -o terminal Terminal.c searchfile.c -lreadline` in your shell. 
 
 
 ## More Information about the project
